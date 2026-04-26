@@ -12,5 +12,8 @@
 uv run pytest
 ```
 
+https://www.geeksforgeeks.org/python/singleton-pattern-in-python-a-complete-guide/
+https://www.deepexploration.org/blog/minimax-algorithm-for-connect-4
+
 ---
 Copyright (c) 2026 Maciej Kwapisz

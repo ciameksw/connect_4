@@ -1,6 +1,3 @@
-# https://www.geeksforgeeks.org/python/singleton-pattern-in-python-a-complete-guide/
-
-
 class Config:
     _instance = None
 
