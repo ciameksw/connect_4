@@ -22,21 +22,27 @@ def test_default_values_are_loaded(config):
     assert config.empty == 0
     assert config.player1 == 1
     assert config.player2 == 2
-    assert config.minimax_depth == 4
-    assert config.exact_win_length_score == 100
-    assert config.one_missing_to_win_score == 5
-    assert config.two_missing_to_win_score == 2
-    assert config.opponent_threat_penalty == -4
-    assert config.terminal_win_score == 1000
-    assert config.terminal_loss_score == -1000
+    assert config.minimax_search_depth == 4
+    assert config.heuristic_score_exact_win_length == 80
+    assert config.heuristic_score_one_missing == 9
+    assert config.heuristic_score_two_missing == 3
+    assert config.heuristic_score_three_missing == 0.5
+    assert config.heuristic_penalty_opponent_one_missing == -40
+    assert config.heuristic_penalty_opponent_two_missing == -2.0
+    assert config.heuristic_penalty_opponent_three_missing == -0.5
+    assert config.heuristic_score_center_column == 3
+    assert config.heuristic_score_multiplier == 1.5
+    assert config.heuristic_depth_discount_ratio == 0.25
+    assert config.terminal_score_win == 80
+    assert config.terminal_score_loss == -80
 
 
 def test_update_changes_existing_values(config):
-    config.update(rows=8, win_length=5, minimax_depth=6)
+    config.update(rows=8, win_length=5, minimax_search_depth=6)
 
     assert config.rows == 8
     assert config.win_length == 5
-    assert config.minimax_depth == 6
+    assert config.minimax_search_depth == 6
 
 
 def test_update_unknown_key_raises(config):
@@ -45,12 +51,12 @@ def test_update_unknown_key_raises(config):
 
 
 def test_reset_restores_defaults(config):
-    config.update(rows=10, win_length=5, minimax_depth=7)
+    config.update(rows=10, win_length=5, minimax_search_depth=7)
     config.reset()
 
     assert config.rows == 6
     assert config.win_length == 4
-    assert config.minimax_depth == 4
+    assert config.minimax_search_depth == 4
 
 
 def test_to_dict_returns_public_settings_only(config):
