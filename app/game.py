@@ -29,14 +29,6 @@ def deep_board_copy(board: Board) -> Board:
     return [row.copy() for row in board]
 
 
-def print_board(board: Board):
-    for row in board:
-        print("|", end="")
-        for cell in row:
-            print(cell, "|", end="", sep="")
-        print("")
-
-
 def available_moves(board: Board) -> list[int]:
     return [i for i, cell in enumerate(board[0]) if cell == EMPTY]
 
