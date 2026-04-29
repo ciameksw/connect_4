@@ -1,4 +1,4 @@
-from app.game import Board
+from game_logic import Board
 
 
 def print_board(board: Board):

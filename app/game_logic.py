@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from app.config import Config
+from config import Config
 
 Board = list[list[int]]
 
