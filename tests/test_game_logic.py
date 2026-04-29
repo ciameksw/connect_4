@@ -257,3 +257,25 @@ def test_is_final_returns_true_for_full_board(game_logic):
     result = MakeMoveResult(board, 0, 0)
 
     assert game_logic.is_final(result) is True
+
+
+def test_count_pieces_empty_board(game_logic):
+    board = game_logic.create_board()
+
+    assert game_logic.count_pieces(board) == 0
+
+
+def test_count_pieces_mixed(game_logic):
+    e = game_logic.config.empty
+    p1 = game_logic.config.player1
+    p2 = game_logic.config.player2
+    board = [
+        [e, e, e, e, e, e, e],
+        [e, e, e, e, e, e, e],
+        [e, e, e, e, e, e, e],
+        [e, e, e, e, e, e, e],
+        [e, p1, e, e, e, e, e],
+        [p1, p2, e, e, e, e, e],
+    ]
+
+    assert game_logic.count_pieces(board) == 3

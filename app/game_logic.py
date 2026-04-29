@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from config import Config
+from app.config import Config
 
 Board = list[list[int]]
 
@@ -113,3 +113,11 @@ class GameLogic:
             c += delta_column
 
         return count
+
+    def count_pieces(self, board: Board) -> int:
+        total_pieces = 0
+        for row in board:
+            for cell in row:
+                if cell != self.config.empty:
+                    total_pieces += 1
+        return total_pieces
