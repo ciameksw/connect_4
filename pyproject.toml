@@ -1,6 +1,6 @@
 [project]
-name = "pytemp"
-description = "A simple Python package template"
+name = "connect4"
+description = "A Connect 4 game with AI opponent"
 dynamic = ["version"]
 requires-python = ">=3.14"
 readme = "README.md"
@@ -22,7 +22,7 @@ testpaths = [
 pythonpath = "."
 
 [project.scripts]
-my_app = "app.main:main"
+connect4 = "app.main:main"
 
 [tool.coverage.run]
 
