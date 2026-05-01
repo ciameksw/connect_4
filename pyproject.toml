@@ -24,6 +24,9 @@ pythonpath = "."
 [project.scripts]
 connect4 = "app.main:main"
 
+[tool.uv]
+package = true
+
 [tool.coverage.run]
 
 omit = [
