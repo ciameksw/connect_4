@@ -50,6 +50,31 @@ class Connect4Game:
         # Store who the player is (default to player 1, but can be changed in menu)
         self.player = self.config.player1
 
+    def apply_config_changes(self):
+        # Change window size based on new config
+        self.width = self.config.columns * self.cell_size
+        self.height = (self.config.rows + 2) * self.cell_size
+        self.screen = pygame.display.set_mode((self.width, self.height))
+
+        # Update GameLogic and AI
+        self.game_logic = GameLogic(self.config)
+        self.ai = AI(self.game_logic, self.config)
+
+        # Update the views
+        self.game_view = GameView(
+            self.screen,
+            self.font,
+            self.width,
+            self.height,
+            self.cell_size,
+            self.config,
+            self.game_logic,
+        )
+        self.options_view = OptionsView(
+            self.screen, self.font, self.width, self.cell_size, self.config
+        )
+        self.menu_view = MenuView(self.screen, self.font, self.width, self.cell_size)
+
     def run(self):
         while True:
             if self.current_view == self.menu_view.id:
@@ -92,12 +117,21 @@ class Connect4Game:
                 # Check for quit events
                 self.check_and_handle_quit(event)
 
-                # TODO: implement options editing
+                # Handle editing options
+                if event.type == pygame.KEYDOWN:
+                    if not self.options_view.edit_mode:
+                        self.options_view.handle_event_in_select_mode(event)
+                    else:
+                        self.options_view.handle_event_in_edit_mode(event)
 
                 # Check for ESC to go back to menu
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    # First apply the config
+                    self.apply_config_changes()
                     self.current_view = self.menu_view.id
                     in_options = False
+
+                self.options_view.show()
 
     def run_game_loop(self):
         self.game_view.draw_board()
