@@ -17,7 +17,15 @@ class AI:
         self.game_logic = game_logic or GameLogic(config)
         self.config = self.game_logic.config
 
-    def choose_best_move(self, make_move_result: MakeMoveResult) -> int:
+    def choose_best_move(self, make_move_result: Optional[MakeMoveResult]) -> int:
+        # If the AI start, create starting board state for minimax
+        if make_move_result is None:
+            make_move_result = MakeMoveResult(
+                board=self.game_logic.create_board(),
+                row=0,
+                column=0,
+            )
+
         # Select next player based on the board state
         player = self.game_logic.next_player(make_move_result.board)
 
