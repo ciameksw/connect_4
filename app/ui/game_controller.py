@@ -30,10 +30,8 @@ class Connect4Game:
         pygame.display.set_caption("Connect 4")
 
         # Setup pygame/view classes
-        self.menu_view = MenuView(self.screen, self.font, self.width, self.cell_size)
-        self.options_view = OptionsView(
-            self.screen, self.font, self.width, self.cell_size, self.config
-        )
+        self.menu_view = MenuView(self.screen, self.font)
+        self.options_view = OptionsView(self.screen, self.font, self.config)
         self.game_view = GameView(
             self.screen,
             self.font,
@@ -70,18 +68,22 @@ class Connect4Game:
             self.config,
             self.game_logic,
         )
-        self.options_view = OptionsView(
-            self.screen, self.font, self.width, self.cell_size, self.config
-        )
-        self.menu_view = MenuView(self.screen, self.font, self.width, self.cell_size)
+        self.options_view = OptionsView(self.screen, self.font, self.config)
+        self.menu_view = MenuView(self.screen, self.font)
 
     def run(self):
         while True:
             if self.current_view == self.menu_view.id:
+                self.screen = pygame.display.set_mode((800, 600))
+                self.game_view.screen = self.screen
                 self.run_menu_loop()
             elif self.current_view == self.options_view.id:
+                self.screen = pygame.display.set_mode((800, 600))
+                self.game_view.screen = self.screen
                 self.run_options_loop()
             elif self.current_view == self.game_view.id:
+                self.screen = pygame.display.set_mode((self.width, self.height))
+                self.game_view.screen = self.screen
                 self.run_game_loop()
 
     def run_menu_loop(self):

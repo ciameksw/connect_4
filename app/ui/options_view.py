@@ -3,12 +3,12 @@ from pygame.event import Event
 
 
 class OptionsView:
-    def __init__(self, screen, font, width, cell_size, config):
+    def __init__(self, screen, font, config):
         # Initialize options view with screen, font, dimensions, and config
         self.screen = screen
         self.font = font
-        self.width = width
-        self.cell_size = cell_size
+        self.width = 800
+        self.cell_size = 80
         self.config = config
         self.id = "options"
 

@@ -11,12 +11,12 @@ class Button:
 
 
 class MenuView:
-    def __init__(self, screen, font, width, cell_size):
+    def __init__(self, screen, font):
         # Initialize menu view with screen, font, dimensions, and button list
         self.screen = screen
         self.font = font
-        self.width = width
-        self.cell_size = cell_size
+        self.width = 800
+        self.cell_size = 80
         self.id = "menu"
         self.start_as_1_id = "start_player_1"
         self.start_as_2_id = "start_player_2"
