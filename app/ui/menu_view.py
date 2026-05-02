@@ -8,6 +8,8 @@ class Button:
     rect: pygame.Rect
     text: str
     id: str
+    color: tuple
+    text_color: tuple
 
 
 class MenuView:
@@ -16,7 +18,8 @@ class MenuView:
         self.screen = screen
         self.font = font
         self.width = 800
-        self.cell_size = 80
+        self.height = 600
+
         self.id = "menu"
         self.start_as_1_id = "start_player_1"
         self.start_as_2_id = "start_player_2"
@@ -25,39 +28,45 @@ class MenuView:
 
     def setup_buttons(self):
         # Define button rectangles
-        start_as_player_1_rect = pygame.Rect(
-            self.width // 2 - 150, self.cell_size * 2, 300, self.cell_size
-        )
-        start_as_player_2_rect = pygame.Rect(
-            self.width // 2 - 150, self.cell_size * 4, 300, self.cell_size
-        )
-        options_rect = pygame.Rect(self.width // 2 - 150, self.cell_size * 6, 300, self.cell_size)
+        start_as_player_1_rect = pygame.Rect(self.width // 2 - 150, 160, 300, 80)
+        start_as_player_2_rect = pygame.Rect(self.width // 2 - 150, 320, 300, 80)
+        options_rect = pygame.Rect(self.width // 2 - 150, 480, 300, 80)
 
         # Create buttons with their labels and IDs
         start_as_player_1_btn = Button(
-            start_as_player_1_rect, "Start as Player 1", self.start_as_1_id
+            start_as_player_1_rect,
+            "Start as Player 1",
+            self.start_as_1_id,
+            (220, 40, 40),
+            (255, 255, 255),
         )
         start_as_player_2_btn = Button(
-            start_as_player_2_rect, "Start as Player 2", self.start_as_2_id
+            start_as_player_2_rect,
+            "Start as Player 2",
+            self.start_as_2_id,
+            (240, 200, 40),
+            (40, 40, 40),
         )
-        options_btn = Button(options_rect, "Options", self.options_id)
+        options_btn = Button(
+            options_rect, "Options", self.options_id, (50, 150, 220), (255, 255, 255)
+        )
 
         # Return list of buttons with their labels
         return [start_as_player_1_btn, start_as_player_2_btn, options_btn]
 
     def show(self):
         # Fill the background
-        self.screen.fill((255, 255, 255))
+        self.screen.fill((30, 80, 160))
 
         # Draw the title
-        title = self.font.render("Connect 4", True, (0, 0, 0))
-        title_rect = title.get_rect(center=(self.width // 2, self.cell_size))
+        title = pygame.font.SysFont("Arial", 64).render("Connect 4", True, (255, 255, 255))
+        title_rect = title.get_rect(center=(self.width // 2, 40))
         self.screen.blit(title, title_rect)
 
         # Draw the buttons
         for button in self.menu_buttons:
-            pygame.draw.rect(self.screen, (200, 200, 200), button.rect)
-            label = self.font.render(button.text, True, (0, 0, 0))
+            pygame.draw.rect(self.screen, button.color, button.rect)
+            label = self.font.render(button.text, True, button.text_color)
             label_rect = label.get_rect(center=button.rect.center)
             self.screen.blit(label, label_rect)
 
