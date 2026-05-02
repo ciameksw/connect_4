@@ -1,6 +1,6 @@
 import pygame
 
-from app.ui.button import Button
+from app.ui import button
 
 
 class MenuView:
@@ -23,21 +23,21 @@ class MenuView:
         options_rect = pygame.Rect(self.width // 2 - 150, 480, 300, 80)
 
         # Create buttons with their labels and IDs
-        start_as_player_1_btn = Button(
+        start_as_player_1_btn = button.Button(
             start_as_player_1_rect,
             "Start as Player 1",
             self.start_as_1_id,
             (220, 40, 40),
             (255, 255, 255),
         )
-        start_as_player_2_btn = Button(
+        start_as_player_2_btn = button.Button(
             start_as_player_2_rect,
             "Start as Player 2",
             self.start_as_2_id,
             (240, 200, 40),
             (40, 40, 40),
         )
-        options_btn = Button(
+        options_btn = button.Button(
             options_rect, "Options", self.options_id, (50, 150, 220), (255, 255, 255)
         )
 
@@ -54,11 +54,8 @@ class MenuView:
         self.screen.blit(title, title_rect)
 
         # Draw the buttons
-        for button in self.menu_buttons:
-            pygame.draw.rect(self.screen, button.color, button.rect)
-            label = pygame.font.SysFont("Arial", 32).render(button.text, True, button.text_color)
-            label_rect = label.get_rect(center=button.rect.center)
-            self.screen.blit(label, label_rect)
+        for btn in self.menu_buttons:
+            btn.draw(self.screen, pygame.font.SysFont("Arial", 32))
 
         # Update the display to show the menu
         pygame.display.flip()

@@ -1,7 +1,7 @@
 import pygame
 from pygame.event import Event
 
-from app.ui.button import Button
+from app.ui import button
 
 
 class OptionsView:
@@ -64,9 +64,11 @@ class OptionsView:
         )
 
         # Create buttons with their labels and IDs
-        easy_btn = Button(easy_rect, "Easy", self.easy_id, (60, 180, 90), (255, 255, 255))
-        medium_btn = Button(medium_rect, "Medium", self.medium_id, (240, 200, 40), (40, 40, 40))
-        hard_btn = Button(hard_rect, "Hard", self.hard_id, (200, 60, 60), (255, 255, 255))
+        easy_btn = button.Button(easy_rect, "Easy", self.easy_id, (60, 180, 90), (255, 255, 255))
+        medium_btn = button.Button(
+            medium_rect, "Medium", self.medium_id, (240, 200, 40), (40, 40, 40)
+        )
+        hard_btn = button.Button(hard_rect, "Hard", self.hard_id, (200, 60, 60), (255, 255, 255))
 
         # Return list of buttons with their labels
         return [easy_btn, medium_btn, hard_btn]
@@ -86,11 +88,8 @@ class OptionsView:
         self.screen.blit(title, title_rect)
 
         # Draw the buttons
-        for button in self.options_buttons:
-            pygame.draw.rect(self.screen, button.color, button.rect)
-            label = self.font.render(button.text, True, button.text_color)
-            label_rect = label.get_rect(center=button.rect.center)
-            self.screen.blit(label, label_rect)
+        for btn in self.options_buttons:
+            btn.draw(self.screen, self.font)
 
         # Display the options
         y = 120
