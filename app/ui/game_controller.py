@@ -30,7 +30,7 @@ class Connect4Game:
         pygame.display.set_caption("Connect 4")
 
         # Setup pygame/view classes
-        self.menu_view = MenuView(self.screen, self.font)
+        self.menu_view = MenuView(self.screen)
         self.options_view = OptionsView(self.screen, self.font, self.config)
         self.game_view = GameView(
             self.screen,
@@ -69,7 +69,7 @@ class Connect4Game:
             self.game_logic,
         )
         self.options_view = OptionsView(self.screen, self.font, self.config)
-        self.menu_view = MenuView(self.screen, self.font)
+        self.menu_view = MenuView(self.screen)
 
     def run(self):
         while True:

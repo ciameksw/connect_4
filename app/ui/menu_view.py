@@ -1,22 +1,12 @@
-from dataclasses import dataclass
-
 import pygame
 
-
-@dataclass
-class Button:
-    rect: pygame.Rect
-    text: str
-    id: str
-    color: tuple
-    text_color: tuple
+from app.ui.button import Button
 
 
 class MenuView:
-    def __init__(self, screen, font):
-        # Initialize menu view with screen, font, dimensions, and button list
+    def __init__(self, screen):
+        # Initialize menu view with screen, dimensions, and button list
         self.screen = screen
-        self.font = font
         self.width = 800
         self.height = 600
 
@@ -66,7 +56,7 @@ class MenuView:
         # Draw the buttons
         for button in self.menu_buttons:
             pygame.draw.rect(self.screen, button.color, button.rect)
-            label = self.font.render(button.text, True, button.text_color)
+            label = pygame.font.SysFont("Arial", 32).render(button.text, True, button.text_color)
             label_rect = label.get_rect(center=button.rect.center)
             self.screen.blit(label, label_rect)
 
