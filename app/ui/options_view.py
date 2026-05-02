@@ -1,6 +1,8 @@
 import pygame
 from pygame.event import Event
 
+from app.ui.button import Button
+
 
 class OptionsView:
     def __init__(self, screen, font, config):
@@ -8,11 +10,17 @@ class OptionsView:
         self.screen = screen
         self.font = font
         self.width = 800
+        self.height = 600
         self.cell_size = 80
         self.config = config
         self.id = "options"
 
         self.options_font = pygame.font.SysFont("Arial", 20)
+
+        self.easy_id = "easy"
+        self.medium_id = "medium"
+        self.hard_id = "hard"
+        self.options_buttons = self.setup_buttons()
 
         # Define options for editing
         self.options = [
@@ -39,19 +47,50 @@ class OptionsView:
         self.edit_mode = False
         self.input_buffer = ""
 
+    def setup_buttons(self):
+        button_width = 180
+        button_height = 70
+        spacing = 40
+
+        total_width = 3 * button_width + 2 * spacing
+        start_x = (self.width - total_width) // 2
+        y = 120
+
+        # Define button rectangles
+        easy_rect = pygame.Rect(start_x, y, button_width, button_height)
+        medium_rect = pygame.Rect(start_x + button_width + spacing, y, button_width, button_height)
+        hard_rect = pygame.Rect(
+            start_x + 2 * (button_width + spacing), y, button_width, button_height
+        )
+
+        # Create buttons with their labels and IDs
+        easy_btn = Button(easy_rect, "Easy", self.easy_id, (60, 180, 90), (255, 255, 255))
+        medium_btn = Button(medium_rect, "Medium", self.medium_id, (240, 200, 40), (40, 40, 40))
+        hard_btn = Button(hard_rect, "Hard", self.hard_id, (200, 60, 60), (255, 255, 255))
+
+        # Return list of buttons with their labels
+        return [easy_btn, medium_btn, hard_btn]
+
     def show(self):
         # Fill the background
-        self.screen.fill((255, 255, 255))
+        self.screen.fill((30, 80, 160))
 
         # Show message to press ESC to go back to menu
-        esc = self.font.render("Press ESC to go back to menu", True, (0, 0, 0))
-        esc_rect = esc.get_rect(center=(self.width // 2, self.cell_size * 0.5))
+        esc = pygame.font.SysFont("Arial", 24).render("ESC - Go Back", True, (255, 255, 255))
+        esc_rect = esc.get_rect(center=(80, 40))
         self.screen.blit(esc, esc_rect)
 
         # Display the title
-        title = self.font.render("Options", True, (0, 0, 0))
-        title_rect = title.get_rect(center=(self.width // 2, self.cell_size * 1.2))
+        title = pygame.font.SysFont("Arial", 64).render("Options", True, (255, 255, 255))
+        title_rect = title.get_rect(center=(self.width // 2, 40))
         self.screen.blit(title, title_rect)
+
+        # Draw the buttons
+        for button in self.options_buttons:
+            pygame.draw.rect(self.screen, button.color, button.rect)
+            label = self.font.render(button.text, True, button.text_color)
+            label_rect = label.get_rect(center=button.rect.center)
+            self.screen.blit(label, label_rect)
 
         # Display the options
         y = 120
@@ -60,7 +99,7 @@ class OptionsView:
             value = getattr(self.config, key)
 
             # Highlight the selected option
-            color = (200, 0, 0) if i == self.selected_index else (0, 0, 0)
+            color = (200, 0, 0) if i == self.selected_index else (255, 255, 255)
 
             # Show input buffer if in edit mode
             if self.edit_mode and i == self.selected_index:
