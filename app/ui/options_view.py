@@ -5,10 +5,9 @@ from app.ui import button
 
 
 class OptionsView:
-    def __init__(self, screen, font, config):
-        # Initialize options view with screen, font, dimensions, and config
+    def __init__(self, screen, config):
+        # Initialize options view with screen, dimensions, and config
         self.screen = screen
-        self.font = font
         self.width = 800
         self.height = 600
         self.cell_size = 80
@@ -49,18 +48,17 @@ class OptionsView:
 
     def setup_buttons(self):
         button_width = 180
-        button_height = 70
+        button_height = 50
         spacing = 40
 
-        total_width = 3 * button_width + 2 * spacing
-        start_x = (self.width - total_width) // 2
-        y = 120
+        x = 530
+        start_y = 80
 
         # Define button rectangles
-        easy_rect = pygame.Rect(start_x, y, button_width, button_height)
-        medium_rect = pygame.Rect(start_x + button_width + spacing, y, button_width, button_height)
+        easy_rect = pygame.Rect(x, start_y, button_width, button_height)
+        medium_rect = pygame.Rect(x, start_y + button_height + spacing, button_width, button_height)
         hard_rect = pygame.Rect(
-            start_x + 2 * (button_width + spacing), y, button_width, button_height
+            x, start_y + 2 * (button_height + spacing), button_width, button_height
         )
 
         # Create buttons with their labels and IDs
@@ -83,22 +81,31 @@ class OptionsView:
         self.screen.blit(esc, esc_rect)
 
         # Display the title
-        title = pygame.font.SysFont("Arial", 64).render("Options", True, (255, 255, 255))
+        title = pygame.font.SysFont("Arial", 40).render("Options", True, (255, 255, 255))
         title_rect = title.get_rect(center=(self.width // 2, 40))
         self.screen.blit(title, title_rect)
 
         # Draw the buttons
         for btn in self.options_buttons:
-            btn.draw(self.screen, self.font)
+            btn.draw(self.screen, pygame.font.SysFont("Arial", 32))
 
         # Display the options
-        y = 120
+        self.show_options()
+
+        # Update the display to show the options
+        pygame.display.flip()
+
+    def show_options(self):
+        y = 80
         line_height = self.options_font.get_height() + 8
         for i, (key, _) in enumerate(self.options):
             value = getattr(self.config, key)
 
-            # Highlight the selected option
-            color = (200, 0, 0) if i == self.selected_index else (255, 255, 255)
+            if i == self.selected_index:
+                # Red for selected option, yellow if in edit mode
+                color = (255, 255, 0) if self.edit_mode else (200, 0, 0)
+            else:
+                color = (255, 255, 255)  # White for non-selected options
 
             # Show input buffer if in edit mode
             if self.edit_mode and i == self.selected_index:
@@ -110,9 +117,6 @@ class OptionsView:
             label = self.options_font.render(text, True, color)
             self.screen.blit(label, (50, y))
             y += line_height
-
-        # Update the display to show the options
-        pygame.display.flip()
 
     def handle_event_in_select_mode(self, event: Event):
         # In select mode, we navigate the options and enter edit mode

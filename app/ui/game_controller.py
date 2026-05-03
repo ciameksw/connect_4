@@ -31,7 +31,7 @@ class Connect4Game:
 
         # Setup pygame/view classes
         self.menu_view = MenuView(self.screen)
-        self.options_view = OptionsView(self.screen, self.font, self.config)
+        self.options_view = OptionsView(self.screen, self.config)
         self.game_view = GameView(
             self.screen,
             self.font,
@@ -68,7 +68,7 @@ class Connect4Game:
             self.config,
             self.game_logic,
         )
-        self.options_view = OptionsView(self.screen, self.font, self.config)
+        self.options_view = OptionsView(self.screen, self.config)
         self.menu_view = MenuView(self.screen)
 
     def run(self):
