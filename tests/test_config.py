@@ -22,7 +22,7 @@ def test_default_values_are_loaded(config):
     assert config.empty == 0
     assert config.player1 == 1
     assert config.player2 == 2
-    assert config.minimax_search_depth == 4
+    assert config.minimax_search_depth == 6
     assert config.heuristic_score_exact_win_length == 80
     assert config.heuristic_score_one_missing == 9
     assert config.heuristic_score_two_missing == 3
@@ -56,7 +56,7 @@ def test_reset_restores_defaults(config):
 
     assert config.rows == 6
     assert config.win_length == 4
-    assert config.minimax_search_depth == 4
+    assert config.minimax_search_depth == 6
 
 
 def test_to_dict_returns_public_settings_only(config):

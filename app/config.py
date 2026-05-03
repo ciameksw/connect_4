@@ -19,7 +19,7 @@ class Config:
         self.player2 = 2
 
         # Minimax search depth
-        self.minimax_search_depth = 4
+        self.minimax_search_depth = 6
 
         # Heuristic points for our potential windows
         self.heuristic_score_exact_win_length = 80
