@@ -95,7 +95,7 @@ class Connect4Game:
                 self.check_and_handle_quit(event)
 
                 # Get the click result from the menu view
-                result = self.menu_view.handle_event(event)
+                result = self.menu_view.handle_button_event(event)
 
                 if result == self.menu_view.start_as_1_id:
                     self.player = self.config.player1

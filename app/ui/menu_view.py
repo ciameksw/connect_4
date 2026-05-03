@@ -60,7 +60,7 @@ class MenuView:
         # Update the display to show the menu
         pygame.display.flip()
 
-    def handle_event(self, event):
+    def handle_button_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Get mouse position
             pos = event.pos
