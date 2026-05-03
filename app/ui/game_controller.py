@@ -119,6 +119,9 @@ class Connect4Game:
                 # Check for quit events
                 self.check_and_handle_quit(event)
 
+                # Handle button events for options view
+                self.options_view.handle_button_event(event)
+
                 # Handle editing options
                 if event.type == pygame.KEYDOWN:
                     if not self.options_view.edit_mode:

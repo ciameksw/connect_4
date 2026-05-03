@@ -77,7 +77,7 @@ class OptionsView:
 
         # Show message to press ESC to go back to menu
         esc = pygame.font.SysFont("Arial", 24).render("ESC - Go Back", True, (255, 255, 255))
-        esc_rect = esc.get_rect(center=(80, 40))
+        esc_rect = esc.get_rect(center=(100, 45))
         self.screen.blit(esc, esc_rect)
 
         # Display the title
@@ -149,3 +149,28 @@ class OptionsView:
             # Only allow digits, decimal point, and minus sign in the input buffer
             if event.unicode.isdigit() or event.unicode in ".-":
                 self.input_buffer += event.unicode
+
+    def handle_button_event(self, event: Event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # Get mouse position
+            pos = event.pos
+
+            # Check if any button was clicked
+            for btn in self.options_buttons:
+                if btn.rect.collidepoint(pos):
+                    self.select_difficulty(btn.id)
+                    break
+
+    def select_difficulty(self, difficulty_id: str):
+        if difficulty_id == self.easy_id:
+            self.config.reset()
+            self.config.minimax_search_depth = 2
+            self.config.heuristic_penalty_opponent_one_missing = -8
+            self.config.heuristic_score_multiplier = 0.8
+        elif difficulty_id == self.medium_id:
+            self.config.reset()
+            self.config.minimax_search_depth = 4
+            self.config.heuristic_penalty_opponent_one_missing = -20
+            self.config.heuristic_score_multiplier = 1.0
+        elif difficulty_id == self.hard_id:
+            self.config.reset()
