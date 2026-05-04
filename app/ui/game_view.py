@@ -69,6 +69,11 @@ class GameView:
         board_background.fill(self.board_color)
         self.screen.blit(board_background, (0, 2 * self.cell_size))
 
+        # Fill the top background, where animation of the falling token can be shown
+        top_background = pygame.Surface((self.width, self.cell_size))
+        top_background.fill(self.bg_color)
+        self.screen.blit(top_background, (0, self.cell_size))
+
         # For each cell
         for r in range(self.config.rows):
             for c in range(self.config.columns):
@@ -143,17 +148,10 @@ class GameView:
         speed = 20
         clock = pygame.time.Clock()
 
-        # Create a surface for the top background to prevent token trails during animation
-        top_background = pygame.Surface((self.width, self.cell_size))
-        top_background.fill(self.bg_color)
-
         # Animate the token falling until it reaches the target row
         while y < end_y:
             # Redraw the board to clear the previous token position
             self.draw_board()
-
-            # Fill the top background so the token doesn't leave a trail as it falls
-            self.screen.blit(top_background, (0, self.cell_size))
 
             # Draw the token at the current position
             circle_radius = self.cell_size // 2 - 5
@@ -164,9 +162,6 @@ class GameView:
             if y > end_y:
                 y = end_y
             clock.tick(60)
-
-        # Fallback for the top row moves
-        self.screen.blit(top_background, (0, self.cell_size))
 
     def handle_game_end(self, winner: Optional[int]):
         # Set game to finished
