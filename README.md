@@ -56,27 +56,33 @@ uv run pytest
 ## Game Windows & Controls
 
 ### 1. Main Menu
+
 The starting screen where you choose how to begin the game or access options.
 
 **Features:**
+
 - Start as Player 1 (you move first)
 - Start as Player 2 (AI moves first)
 - Go to Options
 
 **Controls:**
+
 - Use left button click.
 
 ---
 
 ### 2. Options Window
+
 Allows you to customize game parameters and AI difficulty.
 
 **Features:**
+
 - Edit board size (rows, columns), win length, and AI parameters
 - Three difficulty presets: Easy, Medium, Hard
 - Save and return to menu
 
 **Controls:**
+
 - Use **UP/DOWN arrows** to select a parameter.
 - Press **ENTER** to edit, type a new value, then **ENTER** to confirm.
 - Click a difficulty button to quickly set recommended AI settings.
@@ -85,14 +91,17 @@ Allows you to customize game parameters and AI difficulty.
 ---
 
 ### 3. Game Window
+
 The main gameplay screen where you play Connect 4 against the AI.
 
 **Features:**
+
 - Interactive Connect 4 board
 - ESC to return to menu
 - End-of-game message (win/tie)
 
 **Controls:**
+
 - Click the left mouse button to place a token.
 - After your move, the AI will play automatically.
 - Press **ESC** to return to the main menu (game progress will be lost).
