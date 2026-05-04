@@ -7,7 +7,7 @@ from app.ui import button
 
 class OptionsView:
     def __init__(self, screen: pygame.Surface, config: Config):
-        # Initialize options view with screen, dimensions, and config
+        """Initialize the options view with the screen and configuration."""
         self.screen = screen
         self.width = 800
         self.height = 600
@@ -62,6 +62,7 @@ class OptionsView:
         self.options_buttons = self.setup_buttons()
 
     def setup_buttons(self) -> list[button.Button]:
+        """Create and return the list of difficulty selection buttons."""
         button_width = 180
         button_height = 50
         spacing = 40
@@ -87,6 +88,7 @@ class OptionsView:
         return [easy_btn, medium_btn, hard_btn]
 
     def show(self) -> None:
+        """Render the options view, including buttons and editable options."""
         # Fill the background
         self.screen.fill(self.bg_color)
 
@@ -111,6 +113,7 @@ class OptionsView:
         pygame.display.update()
 
     def show_options(self) -> None:
+        """Display the list of editable options and their current values."""
         y = 80
         line_height = self.options_font.get_height() + 8
         for i, (key, _) in enumerate(self.options):
@@ -133,7 +136,7 @@ class OptionsView:
             y += line_height
 
     def handle_event_in_select_mode(self, event: Event) -> None:
-        # In select mode, we navigate the options and enter edit mode
+        """Handle keyboard navigation and enter key in select mode."""
         if event.key == pygame.K_DOWN:
             self.selected_index = (self.selected_index + 1) % len(self.options)
         elif event.key == pygame.K_UP:
@@ -144,7 +147,7 @@ class OptionsView:
             self.edit_mode = True
 
     def handle_event_in_edit_mode(self, event: Event) -> None:
-        # In edit mode, we capture input for the selected option and save it on Enter
+        """Handle keyboard input for editing an option value."""
         if event.key == pygame.K_RETURN:
             # Get the key and expected type for the selected option
             key, value_type = self.options[self.selected_index]
@@ -165,6 +168,7 @@ class OptionsView:
                 self.input_buffer += event.unicode
 
     def handle_button_event(self, event: Event) -> None:
+        """Handle mouse button events for difficulty selection buttons."""
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Get mouse position
             pos = event.pos
@@ -176,6 +180,7 @@ class OptionsView:
                     break
 
     def select_difficulty(self, difficulty_id: str) -> None:
+        """Set configuration values based on selected difficulty button."""
         if difficulty_id == self.easy_id:
             self.config.reset()
             self.config.minimax_search_depth = 2
