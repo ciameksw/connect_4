@@ -4,10 +4,9 @@ import pygame
 
 
 class GameView:
-    def __init__(self, screen, font, width, height, cell_size, config, game_logic):
-        # Initialize game view with screen, font, dimensions, config, and game logic
+    def __init__(self, screen, width, height, cell_size, config, game_logic):
+        # Initialize game view with screen, dimensions, config, and game logic
         self.screen = screen
-        self.font = font
         self.width = width
         self.height = height
         self.cell_size = cell_size
@@ -44,7 +43,7 @@ class GameView:
         overlay.fill(self.bg_color)
 
         # Add text
-        text = self.font.render(message, True, self.text_color)
+        text = pygame.font.SysFont("Arial", 32).render(message, True, self.text_color)
         text_rect = text.get_rect(center=(self.width // 2, self.cell_size // 2))
         overlay.blit(text, text_rect)
 

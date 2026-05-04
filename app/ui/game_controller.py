@@ -24,7 +24,6 @@ class Connect4Game:
         self.width = self.config.columns * self.cell_size
         self.height = (self.config.rows + 2) * self.cell_size
         self.screen = pygame.display.set_mode((self.width, self.height))
-        self.font = pygame.font.SysFont("Arial", 32)
 
         # Set window title
         pygame.display.set_caption("Connect 4")
@@ -34,7 +33,6 @@ class Connect4Game:
         self.options_view = OptionsView(self.screen, self.config)
         self.game_view = GameView(
             self.screen,
-            self.font,
             self.width,
             self.height,
             self.cell_size,
@@ -61,7 +59,6 @@ class Connect4Game:
         # Update the views
         self.game_view = GameView(
             self.screen,
-            self.font,
             self.width,
             self.height,
             self.cell_size,
