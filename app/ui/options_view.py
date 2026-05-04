@@ -1,11 +1,12 @@
 import pygame
 from pygame.event import Event
 
+from app.config import Config
 from app.ui import button
 
 
 class OptionsView:
-    def __init__(self, screen, config):
+    def __init__(self, screen: pygame.Surface, config: Config):
         # Initialize options view with screen, dimensions, and config
         self.screen = screen
         self.width = 800
@@ -14,12 +15,9 @@ class OptionsView:
         self.config = config
         self.id = "options"
 
-        self.options_font = pygame.font.SysFont("Arial", 20)
-
         self.easy_id = "easy"
         self.medium_id = "medium"
         self.hard_id = "hard"
-        self.options_buttons = self.setup_buttons()
 
         # Define options for editing
         self.options = [
@@ -46,6 +44,23 @@ class OptionsView:
         self.edit_mode = False
         self.input_buffer = ""
 
+        # UI
+        self.title_font = pygame.font.SysFont("Arial", 40)
+        self.esc_font = pygame.font.SysFont("Arial", 24)
+        self.options_font = pygame.font.SysFont("Arial", 20)
+        self.buttons_font = pygame.font.SysFont("Arial", 32)
+
+        self.bg_color = (25, 55, 110)
+
+        self.text_color = (255, 255, 255)
+        self.text_color_darker = (40, 40, 40)
+
+        self.green_color = (60, 180, 90)
+        self.yellow_color = (240, 200, 40)
+        self.red_color = (220, 50, 50)
+
+        self.options_buttons = self.setup_buttons()
+
     def setup_buttons(self):
         button_width = 180
         button_height = 50
@@ -62,32 +77,32 @@ class OptionsView:
         )
 
         # Create buttons with their labels and IDs
-        easy_btn = button.Button(easy_rect, "Easy", self.easy_id, (60, 180, 90), (255, 255, 255))
+        easy_btn = button.Button(easy_rect, "Easy", self.easy_id, self.green_color, self.text_color)
         medium_btn = button.Button(
-            medium_rect, "Medium", self.medium_id, (240, 200, 40), (40, 40, 40)
+            medium_rect, "Medium", self.medium_id, self.yellow_color, self.text_color_darker
         )
-        hard_btn = button.Button(hard_rect, "Hard", self.hard_id, (200, 60, 60), (255, 255, 255))
+        hard_btn = button.Button(hard_rect, "Hard", self.hard_id, self.red_color, self.text_color)
 
         # Return list of buttons with their labels
         return [easy_btn, medium_btn, hard_btn]
 
     def show(self):
         # Fill the background
-        self.screen.fill((30, 80, 160))
+        self.screen.fill(self.bg_color)
 
         # Show message to press ESC to go back to menu
-        esc = pygame.font.SysFont("Arial", 24).render("ESC - Go Back", True, (255, 255, 255))
-        esc_rect = esc.get_rect(center=(100, 45))
+        esc = self.esc_font.render("ESC - Go Back", True, self.text_color)
+        esc_rect = esc.get_rect(center=(80, 25))
         self.screen.blit(esc, esc_rect)
 
         # Display the title
-        title = pygame.font.SysFont("Arial", 40).render("Options", True, (255, 255, 255))
+        title = self.title_font.render("Options", True, self.text_color)
         title_rect = title.get_rect(center=(self.width // 2, 40))
         self.screen.blit(title, title_rect)
 
         # Draw the buttons
         for btn in self.options_buttons:
-            btn.draw(self.screen, pygame.font.SysFont("Arial", 32))
+            btn.draw(self.screen, self.buttons_font)
 
         # Display the options
         self.show_options()
@@ -102,10 +117,9 @@ class OptionsView:
             value = getattr(self.config, key)
 
             if i == self.selected_index:
-                # Red for selected option, yellow if in edit mode
-                color = (255, 255, 0) if self.edit_mode else (200, 0, 0)
+                color = self.yellow_color if self.edit_mode else self.red_color
             else:
-                color = (255, 255, 255)  # White for non-selected options
+                color = self.text_color
 
             # Show input buffer if in edit mode
             if self.edit_mode and i == self.selected_index:

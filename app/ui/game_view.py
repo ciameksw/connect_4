@@ -17,13 +17,15 @@ class GameView:
         # By default the player is player 1, but this can be changed in the menu
         self.player = self.config.player1
 
+        # Store hovered column to prevent flickering
+        self.hover_col = None
+
+        # UI
         self.bg_color = (25, 55, 110)
         self.board_color = (40, 90, 200)
         self.player1_color = (220, 50, 50)
         self.player2_color = (240, 200, 40)
         self.text_color = (255, 255, 255)
-
-        self.hover_col = None
 
     def reset_game(self, player: int):
         # Set the player
@@ -38,7 +40,7 @@ class GameView:
         self.last_move = None
 
     def show_message(self, message: str):
-        # Create white overlay
+        # Create overlay
         overlay = pygame.Surface((self.width, self.cell_size))
         overlay.fill(self.bg_color)
 
