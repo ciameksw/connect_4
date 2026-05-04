@@ -5,6 +5,7 @@ from app.ui import button
 
 class MenuView:
     def __init__(self, screen: pygame.Surface):
+        """Initialize the menu view with the screen."""
         # Initialize menu view with screen, dimensions, and button list
         self.screen = screen
         self.width = 800
@@ -31,6 +32,7 @@ class MenuView:
         self.menu_buttons = self.setup_buttons()
 
     def setup_buttons(self) -> list[button.Button]:
+        """Create and return the list of main menu buttons."""
         # Define button rectangles
         start_as_player_1_rect = pygame.Rect(self.width // 2 - 150, 160, 300, 80)
         start_as_player_2_rect = pygame.Rect(self.width // 2 - 150, 320, 300, 80)
@@ -59,6 +61,7 @@ class MenuView:
         return [start_as_player_1_btn, start_as_player_2_btn, options_btn]
 
     def show(self) -> None:
+        """Render the main menu, including title and buttons."""
         # Fill the background
         self.screen.fill(self.bg_color)
 
@@ -75,6 +78,7 @@ class MenuView:
         pygame.display.update()
 
     def handle_button_event(self, event: pygame.event.Event) -> str | None:
+        """Handle mouse button events and return the ID of the clicked button, if any."""
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Get mouse position
             pos = event.pos
