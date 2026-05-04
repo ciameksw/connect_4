@@ -61,7 +61,7 @@ class OptionsView:
 
         self.options_buttons = self.setup_buttons()
 
-    def setup_buttons(self):
+    def setup_buttons(self) -> list[button.Button]:
         button_width = 180
         button_height = 50
         spacing = 40
@@ -86,7 +86,7 @@ class OptionsView:
         # Return list of buttons with their labels
         return [easy_btn, medium_btn, hard_btn]
 
-    def show(self):
+    def show(self) -> None:
         # Fill the background
         self.screen.fill(self.bg_color)
 
@@ -110,7 +110,7 @@ class OptionsView:
         # Update the display to show the options
         pygame.display.flip()
 
-    def show_options(self):
+    def show_options(self) -> None:
         y = 80
         line_height = self.options_font.get_height() + 8
         for i, (key, _) in enumerate(self.options):
@@ -132,7 +132,7 @@ class OptionsView:
             self.screen.blit(label, (50, y))
             y += line_height
 
-    def handle_event_in_select_mode(self, event: Event):
+    def handle_event_in_select_mode(self, event: Event) -> None:
         # In select mode, we navigate the options and enter edit mode
         if event.key == pygame.K_DOWN:
             self.selected_index = (self.selected_index + 1) % len(self.options)
@@ -143,7 +143,7 @@ class OptionsView:
             self.input_buffer = str(getattr(self.config, key))
             self.edit_mode = True
 
-    def handle_event_in_edit_mode(self, event: Event):
+    def handle_event_in_edit_mode(self, event: Event) -> None:
         # In edit mode, we capture input for the selected option and save it on Enter
         if event.key == pygame.K_RETURN:
             # Get the key and expected type for the selected option
@@ -164,7 +164,7 @@ class OptionsView:
             if event.unicode.isdigit() or event.unicode in ".-":
                 self.input_buffer += event.unicode
 
-    def handle_button_event(self, event: Event):
+    def handle_button_event(self, event: Event) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Get mouse position
             pos = event.pos
@@ -175,7 +175,7 @@ class OptionsView:
                     self.select_difficulty(btn.id)
                     break
 
-    def select_difficulty(self, difficulty_id: str):
+    def select_difficulty(self, difficulty_id: str) -> None:
         if difficulty_id == self.easy_id:
             self.config.reset()
             self.config.minimax_search_depth = 2
