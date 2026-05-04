@@ -8,36 +8,40 @@
 
 ---
 
-
-
 ## Setup & Installation
 
 **Note for Linux and MacOS users:**
 If you encounter issues with Pygame installation or running the game, you may need to install additional system dependencies:
 
 For Linux
+
 ```shell
 sudo apt-get update && sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libfreetype6-dev python3-dev build-essential
 ```
+
 For MacOS
+
 ```shell
 brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
 ```
 
 1. **Install [uv](https://github.com/astral-sh/uv) (if not installed):**
-	```shell
-	pip install uv
-	```
+
+    ```shell
+    pip install uv
+    ```
 
 2. **Synchronize dependencies:**
-	```shell
-	uv sync
-	```
+
+    ```shell
+    uv sync
+    ```
 
 3. **Run the game:**
-	```shell
-	uv run connect4
-	```
+
+    ```shell
+    uv run connect4
+    ```
 
 ---
 
@@ -48,7 +52,6 @@ uv run pytest
 ```
 
 ---
-
 
 ## Game Windows & Controls
 
