@@ -72,7 +72,7 @@ class MenuView:
             btn.draw(self.screen, self.buttons_font)
 
         # Update the display to show the menu
-        pygame.display.flip()
+        pygame.display.update()
 
     def handle_button_event(self, event: pygame.event.Event) -> str | None:
         if event.type == pygame.MOUSEBUTTONDOWN:

@@ -108,7 +108,7 @@ class OptionsView:
         self.show_options()
 
         # Update the display to show the options
-        pygame.display.flip()
+        pygame.display.update()
 
     def show_options(self) -> None:
         y = 80

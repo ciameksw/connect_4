@@ -2,9 +2,20 @@ from typing import Optional
 
 import pygame
 
+from app.config import Config
+from app.game_logic import GameLogic
+
 
 class GameView:
-    def __init__(self, screen, width, height, cell_size, config, game_logic):
+    def __init__(
+        self,
+        screen: pygame.Surface,
+        width: int,
+        height: int,
+        cell_size: int,
+        config: Config,
+        game_logic: GameLogic,
+    ):
         # Initialize game view with screen, dimensions, config, and game logic
         self.screen = screen
         self.width = width
@@ -18,16 +29,19 @@ class GameView:
         self.player = self.config.player1
 
         # Store hovered column to prevent flickering
-        self.hover_col = None
+        self.hover_col: Optional[int] = None
 
         # UI
+        self.message_font = pygame.font.SysFont("Arial", 32)
+        self.esc_font = pygame.font.SysFont("Arial", 24)
+
         self.bg_color = (25, 55, 110)
         self.board_color = (40, 90, 200)
         self.player1_color = (220, 50, 50)
         self.player2_color = (240, 200, 40)
         self.text_color = (255, 255, 255)
 
-    def reset_game(self, player: int):
+    def reset_game(self, player: int) -> None:
         # Set the player
         self.player = player
 
@@ -39,13 +53,13 @@ class GameView:
         self.finished = False
         self.last_move = None
 
-    def show_message(self, message: str):
+    def show_message(self, message: str) -> None:
         # Create overlay
         overlay = pygame.Surface((self.width, self.cell_size))
         overlay.fill(self.bg_color)
 
         # Add text
-        text = pygame.font.SysFont("Arial", 32).render(message, True, self.text_color)
+        text = self.message_font.render(message, True, self.text_color)
         text_rect = text.get_rect(center=(self.width // 2, self.cell_size // 2))
         overlay.blit(text, text_rect)
 
@@ -53,7 +67,7 @@ class GameView:
         self.screen.blit(overlay, (0, self.cell_size))
 
         # Update the display to show the message
-        pygame.display.flip()
+        pygame.display.update()
 
     def get_column_from_mouse(self, pos: tuple[int, int]) -> Optional[int]:
         x, _ = pos
@@ -66,7 +80,7 @@ class GameView:
             return col
         return None
 
-    def draw_hover_token(self, col: int):
+    def draw_hover_token(self, col: int) -> None:
         # Redraw only if the hover column has changed
         if self.hover_col == col:
             return
@@ -91,7 +105,7 @@ class GameView:
             (col * self.cell_size, self.cell_size, self.cell_size, self.cell_size)
         )
 
-    def draw_board(self):
+    def draw_board(self) -> None:
         # Fill the board background
         board_background = pygame.Surface((self.width, self.cell_size * self.config.rows))
         board_background.fill(self.board_color)
@@ -122,20 +136,20 @@ class GameView:
         # Update the display to show the new board
         pygame.display.update()
 
-    def show(self):
+    def show(self) -> None:
         # Fill the background
         self.screen.fill(self.bg_color)
 
         # Show message to press ESC to go back to menu
-        esc = pygame.font.SysFont("Arial", 24).render("ESC - Go Back", True, self.text_color)
+        esc = self.esc_font.render("ESC - Go Back", True, self.text_color)
         esc_rect = esc.get_rect(center=(80, 25))
         self.screen.blit(esc, esc_rect)
 
         self.draw_board()
 
-        pygame.display.flip()
+        pygame.display.update()
 
-    def handle_move(self, col: int):
+    def handle_move(self, col: int) -> None:
         move_result = self.game_logic.make_move(self.board, col, self.current_player)
         target_row = move_result.row
 
@@ -158,7 +172,7 @@ class GameView:
         # Switch to the next player
         self.current_player = self.game_logic.next_player(self.board)
 
-    def animate_token_drop(self, col: int, target_row: int, player: int):
+    def animate_token_drop(self, col: int, target_row: int, player: int) -> None:
         # Choose color based on player
         color = self.player1_color if player == self.config.player1 else self.player2_color
 
@@ -189,14 +203,14 @@ class GameView:
                 y = end_y
             clock.tick(60)
 
-    def fill_row_above_board(self):
+    def fill_row_above_board(self) -> None:
         # Fill the area above the board with the background color to clear any hover or animation tokens
         top_background = pygame.Surface((self.width, self.cell_size))
         top_background.fill(self.bg_color)
         self.screen.blit(top_background, (0, self.cell_size))
         pygame.display.update((0, self.cell_size, self.width, self.cell_size))
 
-    def handle_game_end(self, winner: Optional[int]):
+    def handle_game_end(self, winner: Optional[int]) -> None:
         # Set game to finished
         self.finished = True
 
