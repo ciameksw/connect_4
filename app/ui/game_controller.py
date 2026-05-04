@@ -11,6 +11,7 @@ from app.ui.options_view import OptionsView
 
 class Connect4Game:
     def __init__(self):
+        """Initialize the game, set up logic, views, and display."""
         # Initialize Pygame
         pygame.init()
 
@@ -47,6 +48,7 @@ class Connect4Game:
         self.player = self.config.player1
 
     def apply_config_changes(self) -> None:
+        """Apply changes from the config, updating window size, logic, and views."""
         # Change window size based on new config
         self.width = self.config.columns * self.cell_size
         self.height = (self.config.rows + 2) * self.cell_size
@@ -69,6 +71,7 @@ class Connect4Game:
         self.menu_view = MenuView(self.screen)
 
     def run(self):
+        """Main loop dispatcher: runs the appropriate view loop based on current view."""
         # Main game loop that runs the appropriate view loop based on the current view
         while True:
             if self.current_view == self.menu_view.id:
@@ -85,6 +88,7 @@ class Connect4Game:
                 self.run_game_loop()
 
     def run_menu_loop(self) -> None:
+        """Run the event loop for the main menu view."""
         self.menu_view.show()
         in_menu = True
         while in_menu:
@@ -111,6 +115,7 @@ class Connect4Game:
                     in_menu = False
 
     def run_options_loop(self) -> None:
+        """Run the event loop for the options view, handling config editing."""
         self.options_view.show()
         in_options = True
         while in_options:
@@ -138,6 +143,7 @@ class Connect4Game:
                 self.options_view.show()
 
     def run_game_loop(self) -> None:
+        """Run the event loop for the game view, handling moves and animations."""
         self.game_view.show()
 
         # If player 2 starts, make the first move for the AI
@@ -194,6 +200,7 @@ class Connect4Game:
                     in_game = False
 
     def check_and_handle_quit(self, event: Event) -> None:
+        """Check for quit event and exit the game if triggered."""
         if event.type == pygame.QUIT:
             pygame.quit()
             return
