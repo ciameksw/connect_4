@@ -51,7 +51,7 @@ Dla każdego okna:
 
 Wynik heurystyki dzielony jest przez liczbę pionków na planszy:
 
-```
+```text
 score = score / liczba_pionków
 ```
 
@@ -67,7 +67,7 @@ Pozwala regulować wpływ heurystyki względem stanów terminalnych
 
 Wynik jest zmniejszany wraz z głębokością:
 
-```
+```text
 score *= (1 - heuristic_depth_discount_ratio * depth_fraction)
 ```
 
