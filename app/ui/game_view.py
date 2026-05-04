@@ -105,15 +105,6 @@ class GameView:
         pygame.display.flip()
 
     def handle_move(self, col: int):
-        # # Find the target row for the move
-        # target_row = None
-        # for r in reversed(range(self.config.rows)):
-        #     if self.board[r][col] == self.config.empty:
-        #         target_row = r
-        #         break
-        # if target_row is None:
-        #     return  # Column full
-
         move_result = self.game_logic.make_move(self.board, col, self.current_player)
         target_row = move_result.row
 
