@@ -152,11 +152,18 @@ class Connect4Game:
                 # Check for quit events
                 self.check_and_handle_quit(event)
 
+                if event.type == pygame.MOUSEMOTION and not self.game_view.finished:
+                    col = self.game_view.get_column_from_mouse(event.pos)
+                    if col is not None and col in self.game_logic.available_moves(
+                        self.game_view.board
+                    ):
+                        self.game_view.draw_hover_token(col)
+
                 if event.type == pygame.MOUSEBUTTONDOWN and not self.game_view.finished:
                     col = self.game_view.get_column_from_mouse(event.pos)
-                    if col not in self.game_logic.available_moves(self.game_view.board):
-                        continue
-                    if col is not None:
+                    if col is not None and col in self.game_logic.available_moves(
+                        self.game_view.board
+                    ):
                         self.game_view.handle_move(col)
                         if (
                             self.game_view.current_player != self.player
@@ -164,6 +171,7 @@ class Connect4Game:
                         ):
                             col = self.ai.choose_best_move(self.game_view.last_move)
                             self.game_view.handle_move(col)
+                    self.game_view.hover_col = None
 
                 # Check for ESC to go back to menu
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:

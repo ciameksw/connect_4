@@ -24,6 +24,8 @@ class GameView:
         self.player2_color = (240, 200, 40)
         self.text_color = (255, 255, 255)
 
+        self.hover_col = None
+
     def reset_game(self, player: int):
         # Set the player
         self.player = player
@@ -63,6 +65,31 @@ class GameView:
             return col
         return None
 
+    def draw_hover_token(self, col: int):
+        # Redraw only if the hover column has changed
+        if self.hover_col == col:
+            return
+        self.hover_col = col
+
+        # Fill the top background, where animation of the falling token can be shown
+        self.fill_row_above_board()
+
+        # Select color based on current player
+        color = (
+            self.player1_color if self.current_player == self.config.player1 else self.player2_color
+        )
+
+        # Calculate coordinates and radius for the hover token
+        x = col * self.cell_size + self.cell_size // 2
+        y = self.cell_size // 2 + self.cell_size
+        circle_radius = self.cell_size // 2 - 5
+
+        # Draw the hover token
+        pygame.draw.circle(self.screen, color, (x, y), circle_radius)
+        pygame.display.update(
+            (col * self.cell_size, self.cell_size, self.cell_size, self.cell_size)
+        )
+
     def draw_board(self):
         # Fill the board background
         board_background = pygame.Surface((self.width, self.cell_size * self.config.rows))
@@ -70,9 +97,7 @@ class GameView:
         self.screen.blit(board_background, (0, 2 * self.cell_size))
 
         # Fill the top background, where animation of the falling token can be shown
-        top_background = pygame.Surface((self.width, self.cell_size))
-        top_background.fill(self.bg_color)
-        self.screen.blit(top_background, (0, self.cell_size))
+        self.fill_row_above_board()
 
         # For each cell
         for r in range(self.config.rows):
@@ -162,6 +187,13 @@ class GameView:
             if y > end_y:
                 y = end_y
             clock.tick(60)
+
+    def fill_row_above_board(self):
+        # Fill the area above the board with the background color to clear any hover or animation tokens
+        top_background = pygame.Surface((self.width, self.cell_size))
+        top_background.fill(self.bg_color)
+        self.screen.blit(top_background, (0, self.cell_size))
+        pygame.display.update((0, self.cell_size, self.width, self.cell_size))
 
     def handle_game_end(self, winner: Optional[int]):
         # Set game to finished
