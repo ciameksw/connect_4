@@ -7,7 +7,7 @@ class Config:
             cls._instance._set_defaults()
         return cls._instance
 
-    def _set_defaults(self):
+    def _set_defaults(self) -> None:
         # Game rules
         self.rows = 6
         self.columns = 7
@@ -41,11 +41,11 @@ class Config:
         self.terminal_score_win = 80
         self.terminal_score_loss = -80
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset all settings to their default values."""
         self._set_defaults()
 
-    def update(self, **kwargs):
+    def update(self, **kwargs) -> None:
         """Update settings with provided keyword arguments."""
         for key, value in kwargs.items():
             if hasattr(self, key):
@@ -53,6 +53,6 @@ class Config:
             else:
                 raise AttributeError(f"Config has no attribute '{key}'")
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """Return a dictionary representation of the current configuration."""
         return {key: getattr(self, key) for key in self.__dict__ if not key.startswith("_")}

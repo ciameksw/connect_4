@@ -46,7 +46,7 @@ class Connect4Game:
         # Store who the player is (default to player 1, but can be changed in menu)
         self.player = self.config.player1
 
-    def apply_config_changes(self):
+    def apply_config_changes(self) -> None:
         # Change window size based on new config
         self.width = self.config.columns * self.cell_size
         self.height = (self.config.rows + 2) * self.cell_size
@@ -83,7 +83,7 @@ class Connect4Game:
                 self.game_view.screen = self.screen
                 self.run_game_loop()
 
-    def run_menu_loop(self):
+    def run_menu_loop(self) -> None:
         self.menu_view.show()
         in_menu = True
         while in_menu:
@@ -108,7 +108,7 @@ class Connect4Game:
                     self.current_view = self.options_view.id
                     in_menu = False
 
-    def run_options_loop(self):
+    def run_options_loop(self) -> None:
         self.options_view.show()
         in_options = True
         while in_options:
@@ -135,7 +135,7 @@ class Connect4Game:
 
                 self.options_view.show()
 
-    def run_game_loop(self):
+    def run_game_loop(self) -> None:
         self.game_view.show()
 
         # If player 2 starts, make the first move for the AI
@@ -178,7 +178,7 @@ class Connect4Game:
                     self.current_view = self.menu_view.id
                     in_game = False
 
-    def check_and_handle_quit(self, event: Event):
+    def check_and_handle_quit(self, event: Event) -> None:
         if event.type == pygame.QUIT:
             pygame.quit()
             return
