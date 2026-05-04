@@ -25,19 +25,19 @@ For MacOS
 brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
 ```
 
-1. **Install [uv](https://github.com/astral-sh/uv) (if not installed):**
+- **Install [uv](https://github.com/astral-sh/uv) (if not installed):**
 
     ```shell
     pip install uv
     ```
 
-2. **Synchronize dependencies:**
+- **Synchronize dependencies:**
 
     ```shell
     uv sync
     ```
 
-3. **Run the game:**
+- **Run the game:**
 
     ```shell
     uv run connect4
