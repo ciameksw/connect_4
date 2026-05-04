@@ -10,8 +10,8 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/wnowicki/pytemp"
-"Source" = "https://github.com/wnowicki/pytemp"
+"Homepage" = "https://github.com/ciameksw/connect_4"
+"Source" = "https://github.com/ciameksw/connect_4"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
