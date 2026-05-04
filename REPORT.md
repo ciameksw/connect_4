@@ -30,11 +30,11 @@ Jeżeli gra się kończy:
 
 Dla stanów pośrednich stosowana jest funkcja heurystyczna, która zlicza wynik na podstawie paru składowych:
 
-##### Preferencja środka
+**Preferencja środka**
 
 Środkowa kolumna daje dodatkowe punkty (`heuristic_score_center_column`)
 
-##### Analiza "okien"
+**Analiza "okien"**
 
 Sprawdza wszystkie możliwe „okna” (ciągi pól o długości `win_length`) w czterech kierunkach:
 
@@ -47,7 +47,7 @@ Dla każdego okna:
 - przyznawane są punkty za własne układy
 - odejmowane są punkty za układy przeciwnika
 
-##### Normalizacja wyniku
+**Normalizacja wyniku**
 
 Wynik heurystyki dzielony jest przez liczbę pionków na planszy:
 
@@ -57,18 +57,18 @@ score = score / liczba_pionków
 
 Zapobiega to nadmiernemu wzrostowi wartości w trakcie gry
 
-##### Multiplier heurystyki
+**Multiplier heurystyki**
 
 Końcowy wynik mnożony jest przez `heuristic_score_multiplier`
 
 Pozwala regulować wpływ heurystyki względem stanów terminalnych
 
-##### Discount względem głębokości
+**Discount względem głębokości**
 
 Wynik jest zmniejszany wraz z głębokością:
 
 ```text
-score *= (1 - heuristic_depth_discount_ratio * depth_fraction)
+score = score * (1 - heuristic_depth_discount_ratio * depth_fraction)
 ```
 
 Dzięki temu:
@@ -82,15 +82,15 @@ Dzięki temu:
 
 ### Parametry planszy
 
-- `rows` – liczba wierszy
-- `columns` – liczba kolumn
-- `win_length` – długość ciągu potrzebnego do wygranej
+- `rows` - liczba wierszy
+- `columns` - liczba kolumn
+- `win_length` - długość ciągu potrzebnego do wygranej
 
 ---
 
 ### Parametry przeszukiwania
 
-- `minimax_search_depth` – głębokość przeszukiwania drzewa
+- `minimax_search_depth` - głębokość przeszukiwania drzewa
 
 Większa wartość:
 
@@ -99,47 +99,39 @@ Większa wartość:
 
 ---
 
-### Heurystyki – własne układy
+### Heurystyki - własne układy
 
 - `heuristic_score_exact_win_length`
 - `heuristic_score_one_missing`
 - `heuristic_score_two_missing`
 - `heuristic_score_three_missing`
 
+Przyznają punkty za układy żetonów AI bliskie wygranej (im bliżej, tym więcej punktów).
+
 ---
 
-### Heurystyki – przeciwnik
+### Heurystyki - przeciwnik
 
 - `heuristic_penalty_opponent_one_missing`
 - `heuristic_penalty_opponent_two_missing`
 - `heuristic_penalty_opponent_three_missing`
 
-Odpowiadają za siłę blokowania przeciwnika.
+Odpowiadają za siłę blokowania przeciwnika - im większa kara, tym AI mocniej blokuje groźby.
 
 ---
 
 ### Parametry pozycyjne
 
-- `heuristic_score_center_column` – bonus za środek planszy
+- `heuristic_score_center_column` - bonus za środek planszy
 
 ---
 
-### Skalowanie i balans
+### Pozostałe parametry
 
-- `heuristic_score_multiplier` – wpływ heurystyki
-
----
-
-### Discount głębokości
-
-- `heuristic_depth_discount_ratio`
-
----
-
-### Wyniki terminalne
-
-- `terminal_score_win`
-- `terminal_score_loss`
+- `heuristic_score_multiplier` - skaluje wpływ heurystyki na ocenę stanu gry
+- `heuristic_depth_discount_ratio` - powoduje, że AI preferuje szybsze zwycięstwa i opóźnia przegrane
+- `terminal_score_win` - wartość punktowa za wygraną
+- `terminal_score_loss` - wartość punktowa za przegraną
 
 ---
 
