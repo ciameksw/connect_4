@@ -18,6 +18,12 @@ class GameView:
         # By default the player is player 1, but this can be changed in the menu
         self.player = self.config.player1
 
+        self.bg_color = (25, 55, 110)
+        self.board_color = (40, 90, 200)
+        self.player1_color = (220, 50, 50)
+        self.player2_color = (240, 200, 40)
+        self.text_color = (255, 255, 255)
+
     def reset_game(self, player: int):
         # Set the player
         self.player = player
@@ -33,15 +39,15 @@ class GameView:
     def show_message(self, message: str):
         # Create white overlay
         overlay = pygame.Surface((self.width, self.cell_size))
-        overlay.fill((255, 255, 255))
+        overlay.fill(self.bg_color)
 
         # Add text
-        text = self.font.render(message, True, (0, 0, 0))
+        text = self.font.render(message, True, self.text_color)
         text_rect = text.get_rect(center=(self.width // 2, self.cell_size // 2))
         overlay.blit(text, text_rect)
 
         # Display the overlay on the screen
-        self.screen.blit(overlay, (0, 0))
+        self.screen.blit(overlay, (0, self.cell_size))
 
         # Update the display to show the message
         pygame.display.flip()
@@ -58,16 +64,10 @@ class GameView:
         return None
 
     def draw_board(self):
-        # Fill the background with blue
-        self.screen.fill((0, 0, 255))
-
-        # Top of the screen stays white
-        overlay = pygame.Surface((self.width, self.cell_size * 2))
-        overlay.fill((255, 255, 255))
-        self.screen.blit(overlay, (0, 0))
-
-        # Show message to press ESC to go back to menu
-        self.show_message("Press ESC to go back to menu")
+        # Fill the board background
+        board_background = pygame.Surface((self.width, self.cell_size * self.config.rows))
+        board_background.fill(self.board_color)
+        self.screen.blit(board_background, (0, 2 * self.cell_size))
 
         # For each cell
         for r in range(self.config.rows):
@@ -77,11 +77,11 @@ class GameView:
                 y = (r + 2) * self.cell_size
 
                 # Determine the color based on the cell value
-                color = (255, 255, 255)
+                color = self.bg_color
                 if self.board[r][c] == self.config.player1:
-                    color = (255, 0, 0)
+                    color = self.player1_color
                 elif self.board[r][c] == self.config.player2:
-                    color = (255, 255, 0)
+                    color = self.player2_color
 
                 # Draw a circle in the cell with the determined color
                 circle_center = (x + self.cell_size // 2, y + self.cell_size // 2)
@@ -89,13 +89,38 @@ class GameView:
                 pygame.draw.circle(self.screen, color, circle_center, circle_radius)
 
         # Update the display to show the new board
+        pygame.display.update()
+
+    def show(self):
+        # Fill the background
+        self.screen.fill(self.bg_color)
+
+        # Show message to press ESC to go back to menu
+        esc = pygame.font.SysFont("Arial", 24).render("ESC - Go Back", True, self.text_color)
+        esc_rect = esc.get_rect(center=(80, 25))
+        self.screen.blit(esc, esc_rect)
+
+        self.draw_board()
+
         pygame.display.flip()
 
     def handle_move(self, col: int):
-        # Make the move for provided column
-        move_result = self.game_logic.make_move(self.board, col, self.current_player)
+        # # Find the target row for the move
+        # target_row = None
+        # for r in reversed(range(self.config.rows)):
+        #     if self.board[r][col] == self.config.empty:
+        #         target_row = r
+        #         break
+        # if target_row is None:
+        #     return  # Column full
 
-        # Update game state
+        move_result = self.game_logic.make_move(self.board, col, self.current_player)
+        target_row = move_result.row
+
+        # Animate the falling token
+        self.animate_token_drop(col, target_row, self.current_player)
+
+        # Make the move for provided column (update board state)
         self.board = move_result.board
         self.last_move = move_result
 
@@ -110,6 +135,47 @@ class GameView:
 
         # Switch to the next player
         self.current_player = self.game_logic.next_player(self.board)
+
+    def animate_token_drop(self, col: int, target_row: int, player: int):
+        # Choose color based on player
+        color = self.player1_color if player == self.config.player1 else self.player2_color
+
+        # Calculate the x coordinate for the center of the token
+        x = col * self.cell_size + self.cell_size // 2
+
+        # Calculate the starting and ending y coordinates for the animation
+        start_y = self.cell_size + self.cell_size // 2
+        end_y = (target_row + 2) * self.cell_size + self.cell_size // 2
+        y = start_y
+
+        # Define the speed of the animation (how many pixels the token moves per frame)
+        speed = 20
+        clock = pygame.time.Clock()
+
+        # Create a surface for the top background to prevent token trails during animation
+        top_background = pygame.Surface((self.width, self.cell_size))
+        top_background.fill(self.bg_color)
+
+        # Animate the token falling until it reaches the target row
+        while y < end_y:
+            # Redraw the board to clear the previous token position
+            self.draw_board()
+
+            # Fill the top background so the token doesn't leave a trail as it falls
+            self.screen.blit(top_background, (0, self.cell_size))
+
+            # Draw the token at the current position
+            circle_radius = self.cell_size // 2 - 5
+            pygame.draw.circle(self.screen, color, (x, y), circle_radius)
+
+            pygame.display.update()
+            y += speed
+            if y > end_y:
+                y = end_y
+            clock.tick(60)
+
+        # Fallback for the top row moves
+        self.screen.blit(top_background, (0, self.cell_size))
 
     def handle_game_end(self, winner: Optional[int]):
         # Set game to finished

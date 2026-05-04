@@ -139,7 +139,7 @@ class Connect4Game:
                 self.options_view.show()
 
     def run_game_loop(self):
-        self.game_view.draw_board()
+        self.game_view.show()
 
         # If player 2 starts, make the first move for the AI
         if self.player == self.config.player2:
