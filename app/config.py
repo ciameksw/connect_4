@@ -2,12 +2,14 @@ class Config:
     _instance = None
 
     def __new__(cls):
+        """Implement singleton pattern to ensure only one instance of Config exists."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._set_defaults()
         return cls._instance
 
     def _set_defaults(self) -> None:
+        """Set all configuration parameters to their default values."""
         # Game rules
         self.rows = 6
         self.columns = 7
