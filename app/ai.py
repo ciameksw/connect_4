@@ -14,10 +14,12 @@ class MinimaxResult:
 
 class AI:
     def __init__(self, game_logic: GameLogic | None = None, config: Config | None = None):
+        """Initialize the AI with a GameLogic and Config instance."""
         self.game_logic = game_logic or GameLogic(config)
         self.config = self.game_logic.config
 
     def choose_best_move(self, make_move_result: Optional[MakeMoveResult]) -> int:
+        """Choose the best move for the current player using the minimax algorithm."""
         # If the AI start, create starting board state for minimax
         if make_move_result is None:
             make_move_result = MakeMoveResult(
@@ -44,6 +46,7 @@ class AI:
         alpha: float = -inf,
         beta: float = inf,
     ) -> MinimaxResult:
+        """Minimax algorithm with alpha-beta pruning to evaluate the best move for the current player."""
         # Check for terminal state or depth limit
         if self.game_logic.is_final(make_move_result):
             return MinimaxResult(score=self._terminal_score(make_move_result), move=None)
@@ -101,8 +104,7 @@ class AI:
         return MinimaxResult(score=float(best_score), move=best_move)
 
     def _terminal_score(self, make_move_result: MakeMoveResult) -> float:
-        # A terminal score is calculated only when the board is in a final state.
-        # We check if it's a win for player1, a win for player2, or a draw.
+        """Return the terminal score for a final board state (win/loss/draw)."""
         w = self.game_logic.winner(make_move_result)
         if w == self.config.player1:
             return float(self.config.terminal_score_win)
@@ -113,6 +115,7 @@ class AI:
     def _evaluate_heuristic_score(
         self, make_move_result: MakeMoveResult, depth_from_root: int
     ) -> float:
+        """Evaluate the board heuristically for non-terminal states."""
         board = make_move_result.board
         score = 0.0
 
@@ -142,6 +145,7 @@ class AI:
         return self._discount_score(score, depth_from_root)
 
     def _evaluate_window(self, window: list[int]) -> float:
+        """Evaluate a window of board cells and return a heuristic score."""
         player1 = self.config.player1
         player2 = self.config.player2
         window_length = self.config.win_length
@@ -173,6 +177,7 @@ class AI:
         return 0.0
 
     def _evaluate_center_column(self, board: Board) -> float:
+        """Return a heuristic score for occupying the center column."""
         center_column = self.config.columns // 2
         score = 0.0
         for row in board:
@@ -183,6 +188,7 @@ class AI:
         return score
 
     def _evaluate_windows_in_direction(self, board: Board, delta_row: int, delta_col: int) -> float:
+        """Evaluate all windows in a given direction and sum their heuristic scores."""
         rows = self.config.rows
         cols = self.config.columns
         win_length = self.config.win_length
@@ -207,16 +213,14 @@ class AI:
         return score
 
     def _normalize_score(self, board: Board, score: float) -> float:
-        # Divide the score by the total number of pieces on the board
-        # to prevent it from growing too large as the game progresses.
+        """Divide the heuristic score by the number of pieces on the board."""
         total_pieces = self.game_logic.count_pieces(board)
         if total_pieces == 0:
             return score
         return score / total_pieces
 
     def _discount_score(self, score: float, depth_from_root: int) -> float:
-        # By discounting the score based on depth,
-        # we encourage the AI to find winning moves sooner and losing moves later in the search tree.
+        """Discount the heuristic score based on the depth in the search tree, to prioritize shorter paths."""
         depth_fraction = depth_from_root / self.config.minimax_search_depth
         discount_factor = 1 - self.config.heuristic_depth_discount_ratio * depth_fraction
         return score * discount_factor
