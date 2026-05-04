@@ -69,6 +69,7 @@ class Connect4Game:
         self.menu_view = MenuView(self.screen)
 
     def run(self):
+        # Main game loop that runs the appropriate view loop based on the current view
         while True:
             if self.current_view == self.menu_view.id:
                 self.screen = pygame.display.set_mode((800, 600))
@@ -94,6 +95,7 @@ class Connect4Game:
                 # Get the click result from the menu view
                 result = self.menu_view.handle_button_event(event)
 
+                # Update the current view based on the click result
                 if result == self.menu_view.start_as_1_id:
                     self.player = self.config.player1
                     self.game_view.reset_game(self.player)
@@ -149,25 +151,38 @@ class Connect4Game:
                 # Check for quit events
                 self.check_and_handle_quit(event)
 
+                # Handle mouse movement for hover effect
                 if event.type == pygame.MOUSEMOTION and not self.game_view.finished:
                     col = self.game_view.get_column_from_mouse(event.pos)
+                    # Only draw hover token if it's a valid move
                     if col is not None and col in self.game_logic.available_moves(
                         self.game_view.board
                     ):
                         self.game_view.draw_hover_token(col)
+                    # If it is not, clear the hover_col and clear the row above the board
+                    else:
+                        self.game_view.hover_col = None
+                        self.game_view.fill_row_above_board()
 
+                # Handle mouse click for making a move
                 if event.type == pygame.MOUSEBUTTONDOWN and not self.game_view.finished:
                     col = self.game_view.get_column_from_mouse(event.pos)
+                    # Only allow placing a token if it's a valid move for the current board state
                     if col is not None and col in self.game_logic.available_moves(
                         self.game_view.board
                     ):
+                        # Make the player's move
                         self.game_view.handle_move(col)
+
+                        # If the game is not finished after the player's move, make the AI move
                         if (
                             self.game_view.current_player != self.player
                             and not self.game_view.finished
                         ):
                             col = self.ai.choose_best_move(self.game_view.last_move)
                             self.game_view.handle_move(col)
+
+                    # Clear the hover_col so the token hovers if the mouse is still over the column after the move
                     self.game_view.hover_col = None
 
                     # Prevent placing tokens when the animation is running
