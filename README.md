@@ -67,7 +67,7 @@ The starting screen where you choose how to begin the game or access options.
 
 **Controls:**
 
-- Use left button click.
+- Click menu button to start playing or go to options.
 
 ---
 
@@ -102,7 +102,7 @@ The main gameplay screen where you play Connect 4 against the AI.
 
 **Controls:**
 
-- Click the left mouse button to place a token.
+- Click mouse button to place a token.
 - After your move, the AI will play automatically.
 - Press **ESC** to return to the main menu (game progress will be lost).
 - When the game ends, a message will appear above the board.
