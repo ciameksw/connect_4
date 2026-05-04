@@ -30,11 +30,11 @@ Jeżeli gra się kończy:
 
 Dla stanów pośrednich stosowana jest funkcja heurystyczna, która zlicza wynik na podstawie paru składowych:
 
-**Preferencja środka**
+##### Preferencja środka
 
 Środkowa kolumna daje dodatkowe punkty (`heuristic_score_center_column`)
 
-**Analiza "okien"**
+##### Analiza "okien"
 
 Sprawdza wszystkie możliwe „okna” (ciągi pól o długości `win_length`) w czterech kierunkach:
 
@@ -47,7 +47,7 @@ Dla każdego okna:
 - przyznawane są punkty za własne układy
 - odejmowane są punkty za układy przeciwnika
 
-**Normalizacja wyniku**
+##### Normalizacja wyniku
 
 Wynik heurystyki dzielony jest przez liczbę pionków na planszy:
 
@@ -57,13 +57,13 @@ score = score / liczba_pionków
 
 Zapobiega to nadmiernemu wzrostowi wartości w trakcie gry
 
-**Multiplier heurystyki**
+##### Multiplier heurystyki
 
 Końcowy wynik mnożony jest przez `heuristic_score_multiplier`
 
 Pozwala regulować wpływ heurystyki względem stanów terminalnych
 
-**Discount względem głębokości**
+##### Discount względem głębokości
 
 Wynik jest zmniejszany wraz z głębokością:
 
