@@ -173,6 +173,9 @@ class Connect4Game:
                             self.game_view.handle_move(col)
                     self.game_view.hover_col = None
 
+                    # Prevent placing tokens when the animation is running
+                    pygame.event.clear(pygame.MOUSEBUTTONDOWN)
+
                 # Check for ESC to go back to menu
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.current_view = self.menu_view.id
