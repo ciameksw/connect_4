@@ -16,7 +16,7 @@ class GameView:
         config: Config,
         game_logic: GameLogic,
     ):
-        # Initialize game view with screen, dimensions, config, and game logic
+        """Initialize the game view with screen, dimensions, configuration, and game logic."""
         self.screen = screen
         self.width = width
         self.height = height
@@ -42,7 +42,7 @@ class GameView:
         self.text_color = (255, 255, 255)
 
     def reset_game(self, player: int) -> None:
-        # Set the player
+        """Reset the game state for a new game, setting the starting player and board."""
         self.player = player
 
         # Create a new board
@@ -54,7 +54,7 @@ class GameView:
         self.last_move = None
 
     def show_message(self, message: str) -> None:
-        # Create overlay
+        """Display a message overlay above the board."""
         overlay = pygame.Surface((self.width, self.cell_size))
         overlay.fill(self.bg_color)
 
@@ -70,6 +70,7 @@ class GameView:
         pygame.display.update()
 
     def get_column_from_mouse(self, pos: tuple[int, int]) -> Optional[int]:
+        """Return the column index corresponding to the mouse x position, or None if out of bounds."""
         x, _ = pos
 
         # Convert x coordinate to column index
@@ -81,6 +82,7 @@ class GameView:
         return None
 
     def draw_hover_token(self, col: int) -> None:
+        """Draw a preview token above the board in the hovered column."""
         # Redraw only if the hover column has changed
         if self.hover_col == col:
             return
@@ -106,7 +108,8 @@ class GameView:
         )
 
     def draw_board(self) -> None:
-        # Fill the board background
+        """Draw the game board and all tokens on the screen."""
+        # Fill the background
         board_background = pygame.Surface((self.width, self.cell_size * self.config.rows))
         board_background.fill(self.board_color)
         self.screen.blit(board_background, (0, 2 * self.cell_size))
@@ -137,6 +140,7 @@ class GameView:
         pygame.display.update()
 
     def show(self) -> None:
+        """Render the game view, including the board and ESC message."""
         # Fill the background
         self.screen.fill(self.bg_color)
 
@@ -150,6 +154,7 @@ class GameView:
         pygame.display.update()
 
     def handle_move(self, col: int) -> None:
+        """Handle a player's move, animate the token drop, update state, and check for game end."""
         move_result = self.game_logic.make_move(self.board, col, self.current_player)
         target_row = move_result.row
 
@@ -173,7 +178,8 @@ class GameView:
         self.current_player = self.game_logic.next_player(self.board)
 
     def animate_token_drop(self, col: int, target_row: int, player: int) -> None:
-        # Choose color based on player
+        """Animate the falling token effect for a move in the given column and row."""
+        # Choose color based on the player
         color = self.player1_color if player == self.config.player1 else self.player2_color
 
         # Calculate the x coordinate for the center of the token
@@ -204,17 +210,16 @@ class GameView:
             clock.tick(60)
 
     def fill_row_above_board(self) -> None:
-        # Fill the area above the board with the background color to clear any hover or animation tokens
+        """Clear the area above the board to remove hover or animation tokens."""
         top_background = pygame.Surface((self.width, self.cell_size))
         top_background.fill(self.bg_color)
         self.screen.blit(top_background, (0, self.cell_size))
         pygame.display.update((0, self.cell_size, self.width, self.cell_size))
 
     def handle_game_end(self, winner: Optional[int]) -> None:
-        # Set game to finished
+        """Handle the end of the game, display the result message, and set finished state."""
         self.finished = True
 
-        # Show appropriate message based on winner
         if not winner:
             self.show_message("It's a tie!")
             return
