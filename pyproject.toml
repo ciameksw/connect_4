@@ -1,14 +1,17 @@
 [project]
-name = "pytemp"
-description = "A simple Python package template"
+name = "connect4"
+description = "A Connect 4 game with AI opponent"
 dynamic = ["version"]
 requires-python = ">=3.14"
 readme = "README.md"
 license = { file = "LICENSE.md"}
+dependencies = [
+    "pygame-ce>=2.3.2",
+]
 
 [project.urls]
-"Homepage" = "https://github.com/wnowicki/pytemp"
-"Source" = "https://github.com/wnowicki/pytemp"
+"Homepage" = "https://github.com/ciameksw/connect_4"
+"Source" = "https://github.com/ciameksw/connect_4"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -19,7 +22,10 @@ testpaths = [
 pythonpath = "."
 
 [project.scripts]
-my_app = "app.main:main"
+connect4 = "app.main:main"
+
+[tool.uv]
+package = true
 
 [tool.coverage.run]
 

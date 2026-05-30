@@ -1,2 +1,6 @@
+from app.ui.game_controller import Connect4Game
+
+
 def main():
-    print("Hello World!")
+    game = Connect4Game()
+    game.run()

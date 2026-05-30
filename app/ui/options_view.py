@@ -1,0 +1,195 @@
+import pygame
+from pygame.event import Event
+
+from app.config import Config
+from app.ui import button
+
+
+class OptionsView:
+    def __init__(self, screen: pygame.Surface, config: Config):
+        """Initialize the options view with the screen and configuration."""
+        self.screen = screen
+        self.width = 800
+        self.height = 600
+        self.cell_size = 80
+        self.config = config
+        self.id = "options"
+
+        self.easy_id = "easy"
+        self.medium_id = "medium"
+        self.hard_id = "hard"
+
+        # Define options for editing
+        self.options = [
+            ("rows", int),
+            ("columns", int),
+            ("win_length", int),
+            ("minimax_search_depth", int),
+            ("heuristic_score_exact_win_length", float),
+            ("heuristic_score_one_missing", float),
+            ("heuristic_score_two_missing", float),
+            ("heuristic_score_three_missing", float),
+            ("heuristic_penalty_opponent_one_missing", float),
+            ("heuristic_penalty_opponent_two_missing", float),
+            ("heuristic_penalty_opponent_three_missing", float),
+            ("heuristic_score_center_column", float),
+            ("heuristic_score_multiplier", float),
+            ("heuristic_depth_discount_ratio", float),
+            ("terminal_score_win", float),
+            ("terminal_score_loss", float),
+        ]
+
+        # Editing state
+        self.selected_index = 0
+        self.edit_mode = False
+        self.input_buffer = ""
+
+        # UI
+        self.title_font = pygame.font.SysFont("Arial", 40)
+        self.esc_font = pygame.font.SysFont("Arial", 24)
+        self.options_font = pygame.font.SysFont("Arial", 20)
+        self.buttons_font = pygame.font.SysFont("Arial", 32)
+
+        self.bg_color = (25, 55, 110)
+
+        self.text_color = (255, 255, 255)
+        self.text_color_darker = (40, 40, 40)
+
+        self.green_color = (60, 180, 90)
+        self.yellow_color = (240, 200, 40)
+        self.red_color = (220, 50, 50)
+
+        self.options_buttons = self.setup_buttons()
+
+    def setup_buttons(self) -> list[button.Button]:
+        """Create and return the list of difficulty selection buttons."""
+        button_width = 180
+        button_height = 50
+        spacing = 40
+
+        x = 530
+        start_y = 80
+
+        # Define button rectangles
+        easy_rect = pygame.Rect(x, start_y, button_width, button_height)
+        medium_rect = pygame.Rect(x, start_y + button_height + spacing, button_width, button_height)
+        hard_rect = pygame.Rect(
+            x, start_y + 2 * (button_height + spacing), button_width, button_height
+        )
+
+        # Create buttons with their labels and IDs
+        easy_btn = button.Button(easy_rect, "Easy", self.easy_id, self.green_color, self.text_color)
+        medium_btn = button.Button(
+            medium_rect, "Medium", self.medium_id, self.yellow_color, self.text_color_darker
+        )
+        hard_btn = button.Button(hard_rect, "Hard", self.hard_id, self.red_color, self.text_color)
+
+        # Return list of buttons with their labels
+        return [easy_btn, medium_btn, hard_btn]
+
+    def show(self) -> None:
+        """Render the options view, including buttons and editable options."""
+        # Fill the background
+        self.screen.fill(self.bg_color)
+
+        # Show message to press ESC to go back to menu
+        esc = self.esc_font.render("ESC - Go Back", True, self.text_color)
+        esc_rect = esc.get_rect(center=(80, 25))
+        self.screen.blit(esc, esc_rect)
+
+        # Display the title
+        title = self.title_font.render("Options", True, self.text_color)
+        title_rect = title.get_rect(center=(self.width // 2, 40))
+        self.screen.blit(title, title_rect)
+
+        # Draw the buttons
+        for btn in self.options_buttons:
+            btn.draw(self.screen, self.buttons_font)
+
+        # Display the options
+        self.show_options()
+
+        # Update the display to show the options
+        pygame.display.update()
+
+    def show_options(self) -> None:
+        """Display the list of editable options and their current values."""
+        y = 80
+        line_height = self.options_font.get_height() + 8
+        for i, (key, _) in enumerate(self.options):
+            value = getattr(self.config, key)
+
+            if i == self.selected_index:
+                color = self.yellow_color if self.edit_mode else self.red_color
+            else:
+                color = self.text_color
+
+            # Show input buffer if in edit mode
+            if self.edit_mode and i == self.selected_index:
+                text = f"{key}: {self.input_buffer}_"
+            else:
+                text = f"{key}: {value}"
+
+            # Render the option text
+            label = self.options_font.render(text, True, color)
+            self.screen.blit(label, (50, y))
+            y += line_height
+
+    def handle_event_in_select_mode(self, event: Event) -> None:
+        """Handle keyboard navigation and enter key in select mode."""
+        if event.key == pygame.K_DOWN:
+            self.selected_index = (self.selected_index + 1) % len(self.options)
+        elif event.key == pygame.K_UP:
+            self.selected_index = (self.selected_index - 1) % len(self.options)
+        elif event.key == pygame.K_RETURN:
+            key, _ = self.options[self.selected_index]
+            self.input_buffer = str(getattr(self.config, key))
+            self.edit_mode = True
+
+    def handle_event_in_edit_mode(self, event: Event) -> None:
+        """Handle keyboard input for editing an option value."""
+        if event.key == pygame.K_RETURN:
+            # Get the key and expected type for the selected option
+            key, value_type = self.options[self.selected_index]
+
+            # Try to convert the input buffer to the expected type and save it in the config
+            try:
+                new_value = value_type(self.input_buffer)
+                setattr(self.config, key, new_value)
+            except ValueError:
+                pass
+            self.edit_mode = False
+        elif event.key == pygame.K_BACKSPACE:
+            # Remove the last character from the input buffer
+            self.input_buffer = self.input_buffer[:-1]
+        else:
+            # Only allow digits, decimal point, and minus sign in the input buffer
+            if event.unicode.isdigit() or event.unicode in ".-":
+                self.input_buffer += event.unicode
+
+    def handle_button_event(self, event: Event) -> None:
+        """Handle mouse button events for difficulty selection buttons."""
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # Get mouse position
+            pos = event.pos
+
+            # Check if any button was clicked
+            for btn in self.options_buttons:
+                if btn.rect.collidepoint(pos):
+                    self.select_difficulty(btn.id)
+                    break
+
+    def select_difficulty(self, difficulty_id: str) -> None:
+        """Set configuration values based on selected difficulty button."""
+        if difficulty_id == self.easy_id:
+            self.config.reset()
+            self.config.minimax_search_depth = 2
+            self.config.heuristic_penalty_opponent_one_missing = -8
+            self.config.heuristic_score_multiplier = 0.8
+        elif difficulty_id == self.medium_id:
+            self.config.reset()
+            self.config.minimax_search_depth = 4
+            self.config.heuristic_penalty_opponent_one_missing = -20
+            self.config.heuristic_score_multiplier = 1.0
+        elif difficulty_id == self.hard_id:
+            self.config.reset()
